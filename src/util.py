@@ -44,7 +44,8 @@ def load_image(path, pre_height=146, pre_width=146, height=128, width=128):
 
 def load_image_2(path, pre_height=146, pre_width=146, height=64, width=64 ):
     try:
-        img = skimage.io.imread( path ).astype( float )
+        img = cv.imread( path ).astype( float )
+        aux, file_name = os.path.split(path)
     except IOError:
         return None
 
@@ -70,7 +71,7 @@ def load_image_2(path, pre_height=146, pre_width=146, height=64, width=64 ):
     #    print 'Path:',path
     #resized_img = skimage.transform.resize(black_image,[height,width])
     resized_img = skimage.transform.resize(img, [height, width])
-    cv.imwrite(os.path.join(RESULTS_DIR, 'resized_img.png'), resized_img*255)
+    cv.imwrite(os.path.join(RESULTS_DIR, file_name), resized_img*255)
     return (resized_img*2)-1
 
 
@@ -89,15 +90,15 @@ def crop_random(image_ori, width=64, height=64, x=None, y=None, overlap=7):
     return image, crop, random_x, random_y
 
 
-def merge_mask(image_ori, mask, x=None, y=None):
+def merge_mask(image_ori,  mask, x=None, y=None):
     if image_ori is None: return None
-    rsz_y = 128 if x is None else x
-    rsz_x = 128 if y is None else y
-
-    masked_image = image_ori*(1-mask)
-    #masked_image[np.where((masked_image > 1))] = 1
-    masked_image = skimage.transform.resize(masked_image,[rsz_y,rsz_x])
-    augmented = masked_image*255.0
-    img_name =  'asd.png'
+    rsz_y = 64 if x is None else x
+    rsz_x = 64 if y is None else y
+    masked_image = image_ori * (1 - mask)
+    # masked_image[np.where((masked_image > 1))] = 1
+    masked_image = skimage.transform.resize(masked_image, [rsz_y, rsz_x])
+    image_ori = skimage.transform.resize(image_ori, [128,128])
+    augmented = masked_image * 255.0
+    img_name = 'asd.png'
     cv.imwrite(os.path.join(RESULTS_DIR, img_name), augmented)
     return image_ori, masked_image, x, y

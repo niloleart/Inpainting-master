@@ -167,10 +167,10 @@ for epoch in range(n_epochs):
             test_images_crop = map(lambda i,m: merge_mask(i, m, x=64, y=64), test_images_ori, test_masks_ori)
             test_images, test_crops, xs,ys = zip(*test_images_crop)
 
-            print 'crops:   ',test_crops[0].shape, test_crops[1].shape
+            print 'test_crops:   ',test_crops[0].shape, test_crops[1].shape
             cv.imwrite(os.path.join(temp_dst, 'crops.png'), test_crops[0]*255)
 
-            print 'images:  ',test_images[0].shape, test_images[1].shape
+            print 'test_images:  ',test_images[0].shape, test_images[1].shape
             cv.imwrite(os.path.join(temp_dst, 'images.png'), test_images[0]*255)
 
             reconstruction_vals, recon_ori_vals, bn1_val,bn2_val,bn3_val,bn4_val,bn5_val,bn6_val,debn4_val, debn3_val, debn2_val, debn1_val, loss_G_val, loss_D_val = sess.run(
